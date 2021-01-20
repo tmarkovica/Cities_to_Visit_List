@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name = "Cityst_to_Visit_List"
