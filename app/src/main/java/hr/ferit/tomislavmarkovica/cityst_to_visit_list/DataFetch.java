@@ -2,7 +2,10 @@ package hr.ferit.tomislavmarkovica.cityst_to_visit_list;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,7 +24,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class DataFetch extends AsyncTask<Void,Void,Void> {
+public class DataFetch extends AsyncTask<Void,Void,Void> implements Parcelable {
     private String data = "";
     private List<City> cities = new ArrayList<>();
     private Response response;
@@ -41,7 +44,7 @@ public class DataFetch extends AsyncTask<Void,Void,Void> {
         client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("https://wft-geo-db.p.rapidapi.com/v1/geo/cities")
+                .url("https://wft-geo-db.p.rapidapi.com/v1/geo/cities") // https://wft-geo-db.p.rapidapi.com/v1/geo/cities/Q60
                 .get()
                 .addHeader("x-rapidapi-key", "11ff87a06emshe34071c564f77fdp104cbcjsncd878d29d813")
                 .addHeader("x-rapidapi-host", "wft-geo-db.p.rapidapi.com")
@@ -69,8 +72,8 @@ public class DataFetch extends AsyncTask<Void,Void,Void> {
                         doInBackground(); // on successful response calls doInBackground() method
                         /*
                         try {
-                            //result.setText(response.body().string());
-                            setResponse(response);
+                            result.setText(response.body().string());
+                            //setResponse(response);
                         }
                         catch (IOException ioError) {
                             result.setText("Error during get body");
@@ -99,7 +102,7 @@ public class DataFetch extends AsyncTask<Void,Void,Void> {
             }
 
             JSONObject JO = new JSONObject(data);
-            JSONArray JA = JO.getJSONArray("data");
+            JSONArray JA = JO.getJSONArray("data"); // "data" "type" "properties"
 
             for (int i = 0; i < JA.length(); i++)
             {
@@ -118,9 +121,23 @@ public class DataFetch extends AsyncTask<Void,Void,Void> {
                                     + tempJO.get("name") + "\n"
                                     + tempJO.get("country") + "\n";
                  */
+                /*
+                result.setText(
+                        tempJO.getInt("id")+ "\n" +
+                        tempJO.get("wikiDataId").toString()+ "\n" +
+                        tempJO.get("type").toString()+ "\n" +
+                        tempJO.get("city").toString()+ "\n" +
+                        tempJO.get("name").toString()+ "\n" +
+                        tempJO.get("country").toString()+ "\n" +
+                        tempJO.get("countryCode").toString()+ "\n" +
+                        tempJO.get("region").toString()+ "\n" +
+                        tempJO.get("regionCode").toString()+ "\n" +
+                        tempJO.getDouble("latitude")+ "\n" +
+                        tempJO.getDouble("longitude")+ "\n"
+                );*/
 
                 City tempCity = new City(
-                        tempJO.get("id").toString(),
+                        tempJO.getInt("id"),
                         tempJO.get("wikiDataId").toString(),
                         tempJO.get("type").toString(),
                         tempJO.get("city").toString(),
@@ -129,12 +146,8 @@ public class DataFetch extends AsyncTask<Void,Void,Void> {
                         tempJO.get("countryCode").toString(),
                         tempJO.get("region").toString(),
                         tempJO.get("regionCode").toString(),
-                        tempJO.get("elevationMeters"),
-                        tempJO.get("latitude"),
-                        tempJO.get("longitude"),
-                        tempJO.get("population"),
-                        tempJO.get("timezone").toString(),
-                        tempJO.get("deleted").toString()
+                        tempJO.getDouble("latitude"),
+                        tempJO.getDouble("longitude")
                 );
 
                 cities.add(tempCity);
@@ -154,8 +167,31 @@ public class DataFetch extends AsyncTask<Void,Void,Void> {
     }
 
     public void showData() {
-        //result.setText(cities.get(0).toString());
-        result.setText(cities.toString());
-        //result.setText(data);
+        //result.setText(cities.toString()); // show all
+
+        int n = cities.size();
+        //result.setText(String.valueOf(n));
+
+        //int randomNumber = getRandomNumberFrom1To3();
+    }
+
+    public int getNumberOfElements() { return 0; } //cities.size()
+
+/*
+    private int getRandomNumberFrom1To3() {
+        Random rn = new Random();
+        int randomNumber = rn.nextInt(3) + 1;
+        return randomNumber;
+    }
+*/
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 }

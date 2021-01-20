@@ -7,14 +7,23 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/getBtn"
+        android:id="@+id/buttonFavorites"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/buttonStringFavorites"
         android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
-        android:text="@string/stringButtonTextWebservice"
         />
 
+    <Button
+        android:id="@+id/buttonExplore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/buttonStringExplore"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/buttonFavorites"
+        />
 
     <TextView
         android:id="@+id/result"
@@ -25,7 +34,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_below="@id/getBtn"
+        android:layout_below="@id/buttonExplore"
         android:layout_marginTop="20dp"
         android:padding="10dp"
         />

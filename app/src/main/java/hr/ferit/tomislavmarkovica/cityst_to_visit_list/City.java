@@ -1,7 +1,7 @@
 package hr.ferit.tomislavmarkovica.cityst_to_visit_list;
 
 public class City {
-    private String id;
+    private int id;
     private String wikiDataId;
     private String type;
     private String city;
@@ -17,7 +17,7 @@ public class City {
     private String timezone;
     private boolean deleted;
 
-    public City(String id,
+    public City(int id,
             String wikiDataId,
             String type,
             String city,
@@ -26,12 +26,8 @@ public class City {
             String countryCode,
             String region,
             String regionCode,
-            int elevationMeters,
             double latitude,
-            double longitude,
-            int population,
-            String timezone,
-            boolean deleted) {
+            double longitude) {
         this.id = id;
         this.wikiDataId = wikiDataId;
         this.type = type;
@@ -41,16 +37,12 @@ public class City {
         this.countryCode = countryCode;
         this.region = region;
         this.regionCode = regionCode;
-        this.elevationMeters =;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.population = population;
-        this.timezone = timezone;
-        this.deleted = deleted;
     }
 
-    public String get_id() { return this.id; }
-    public void set_id(String id) { this.id = id; }
+    public int get_id() { return this.id; }
+    public void set_id(int id) { this.id = id; }
 
     public String get_type() { return this.type; }
     public void set_type(String type) { this.type = type; }
@@ -98,20 +90,16 @@ public class City {
     public String toString() {
         return "City {" + "\n" +
                 "id='" + id + '\'' +
-                ", wikiDataId='" + wikiDataId + '\'' +
-                ", type='" + type + '\'' +
-                ", city='" + city + '\'' +
-                ", name='" + name + '\'' +
-                ", country='" + country + '\'' +
-                ", countryCode='" + countryCode + '\'' +
-                ", region='" + region + '\'' +
-                ", regionCode='" + regionCode + '\'' +
-                ", elevationMeters=" + elevationMeters +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
-                ", population=" + population +
-                ", timezone='" + timezone + '\'' +
-                ", deleted=" + deleted +
+                ", wikiDataId='" + wikiDataId + "\n" +
+                ", type='" + type + "\n" +
+                ", city='" + city + "\n" +
+                ", name='" + name + "\n" +
+                ", country='" + country + "\n" +
+                ", countryCode='" + countryCode + "\n" +
+                ", region='" + region + "\n" +
+                ", regionCode='" + regionCode + "\n" +
+                ", latitude=" + latitude + "\n" +
+                ", longitude=" + longitude + "\n" +
                 '}' + "\n" + "\n";
     }
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_gravity="center_vertical"
+    >
+
+    <TextView
+        android:id="@+id/textViewCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:textSize="20sp"
+        android:text="ime prezime"
+        />
+
+    <TextView
+        android:id="@+id/textViewRemoveFromFavorites"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:text="@string/textViewStringRemoveFromFavorites"
+        android:textColor="@color/red"
+        android:textStyle="bold"
+        android:layout_gravity="right"
+        android:clickable="true"
+        android:onClick="onClickRemovePerson"
+        />
+
+</FrameLayout>

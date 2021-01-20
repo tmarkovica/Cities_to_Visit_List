@@ -1,7 +1,9 @@
 package hr.ferit.tomislavmarkovica.cityst_to_visit_list;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
@@ -20,11 +22,18 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button getBtn;
+    public static final String DATA_FETCH = "hr.ferit.tomislavmarkovica.cityst_to_visit_list.DATA_FETCH";
+
+    private Button buttonFavorites;
+    private Button buttonExplore;
+
     private TextView result;
     private OkHttpClient client;
 
     private DataFetch dataFetch;
+
+    private Intent intentFavorites;
+    private Intent intentExplore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,19 +42,51 @@ public class MainActivity extends AppCompatActivity {
 
         result = (TextView) findViewById(R.id.result);
 
-
-        setBtn();
-
         this.dataFetch = new DataFetch(this);
+
+        createIntents();
+
+        setButtonFavoirtes();
+
+        setButtonExplore();
     }
 
-    private void setBtn() {
-        getBtn = (Button) findViewById(R.id.getBtn);
+    private void createIntents() {
+        intentFavorites = new Intent(this, FavoritesActivity.class);
 
-        getBtn.setOnClickListener(new View.OnClickListener() {
+        intentExplore = new Intent(this, ExploreActivity.class);
+
+        // continue here
+        //MyParcelable myParcelable = new MyParcelable();
+        //myParcelable.setDataFetch(dataFetch);
+        //intentExplore.putExtra(DATA_FETCH, (MyParcelable) myParcelable);
+        //intentExplore.putExtra(DATA_FETCH, 101); // ovaj radi
+
+        MyParcelable myParcelable = new MyParcelable();
+        //myParcelable.setDataFetch(dataFetch);
+        myParcelable.setN(1234);
+
+        intentExplore.putExtra(DATA_FETCH, myParcelable);
+    }
+
+    private void setButtonFavoirtes() {
+        buttonFavorites = (Button) findViewById(R.id.buttonFavorites);
+
+        buttonFavorites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dataFetch.showData();
+                startActivity(intentFavorites);
+            }
+        });
+    }
+
+    private void setButtonExplore() {
+        buttonExplore = (Button) findViewById(R.id.buttonExplore);
+
+        buttonExplore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(intentExplore);
             }
         });
     }
