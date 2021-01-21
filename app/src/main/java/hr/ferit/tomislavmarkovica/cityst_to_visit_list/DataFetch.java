@@ -24,21 +24,30 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class DataFetch extends AsyncTask<Void,Void,Void> implements Parcelable {
-    private String data = "";
-    private List<City> cities = new ArrayList<>();
-    private Response response;
+public class DataFetch extends AsyncTask<Void,Void,Void> {
 
-    private OkHttpClient client;
-    private Activity mActivity;
-    private TextView result;
+    // static variable single_instance of type Singleton
+    private static DataFetch single_instance = null;
 
-    public DataFetch(Activity activity) {
-        this.mActivity = activity;
-        this.result = (TextView) mActivity.findViewById(R.id.result);
-
+    // private constructor restricted to this class itself
+    private DataFetch() {
         connectAPI();
     }
+
+    // static method to create instance of Singleton class
+    public static DataFetch getInstance()
+    {
+        if (single_instance == null)
+            single_instance = new DataFetch();
+
+        return single_instance;
+    }
+
+    private String data = "";
+    private List<City> cities = new ArrayList<>();
+
+    private Response response;
+    private OkHttpClient client;
 
     public void connectAPI() {
         client = new OkHttpClient();
@@ -50,36 +59,17 @@ public class DataFetch extends AsyncTask<Void,Void,Void> implements Parcelable {
                 .addHeader("x-rapidapi-host", "wft-geo-db.p.rapidapi.com")
                 .build();
 
-        //Response response = client.newCall(request).execute();
 
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        result.setText("Failure");
-                    }
-                });
+                // do nothing
             }
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        setResponse(response);
-                        doInBackground(); // on successful response calls doInBackground() method
-                        /*
-                        try {
-                            result.setText(response.body().string());
-                            //setResponse(response);
-                        }
-                        catch (IOException ioError) {
-                            result.setText("Error during get body");
-                        }*/
-                    }
-                });
+                setResponse(response);
+                doInBackground();
             }
         });
     }
@@ -107,34 +97,6 @@ public class DataFetch extends AsyncTask<Void,Void,Void> implements Parcelable {
             for (int i = 0; i < JA.length(); i++)
             {
                 JSONObject tempJO = JA.getJSONObject(i);
-                /*
-                City tempCity = new City("","","","");
-
-                if(tempJO.isNull("id")  || tempJO.get("id") == "") tempCity.set_id("id: 0000");
-                else tempCity.set_id("id: " + tempJO.get("id"));
-
-                if(tempJO.isNull("wikiDataId")  || tempJO.get("wikiDataId") == "") tempCity.set_wikiDataId("Unknown");
-                else tempCity.set_wikiDataId((String) tempJO.get("wikiDataId"));
-
-                String singleParsed = tempJO.get("id") + "\n"
-                                    + tempJO.get("wikiDataId") + "\n"
-                                    + tempJO.get("name") + "\n"
-                                    + tempJO.get("country") + "\n";
-                 */
-                /*
-                result.setText(
-                        tempJO.getInt("id")+ "\n" +
-                        tempJO.get("wikiDataId").toString()+ "\n" +
-                        tempJO.get("type").toString()+ "\n" +
-                        tempJO.get("city").toString()+ "\n" +
-                        tempJO.get("name").toString()+ "\n" +
-                        tempJO.get("country").toString()+ "\n" +
-                        tempJO.get("countryCode").toString()+ "\n" +
-                        tempJO.get("region").toString()+ "\n" +
-                        tempJO.get("regionCode").toString()+ "\n" +
-                        tempJO.getDouble("latitude")+ "\n" +
-                        tempJO.getDouble("longitude")+ "\n"
-                );*/
 
                 City tempCity = new City(
                         tempJO.getInt("id"),
@@ -166,32 +128,14 @@ public class DataFetch extends AsyncTask<Void,Void,Void> implements Parcelable {
         super.onPostExecute(aVoid);
     }
 
-    public void showData() {
-        //result.setText(cities.toString()); // show all
 
-        int n = cities.size();
-        //result.setText(String.valueOf(n));
+    public String getData() { return data; } //cities.size()
 
-        //int randomNumber = getRandomNumberFrom1To3();
+    public int getNumberOfCities() {
+        return cities.size();
     }
 
-    public int getNumberOfElements() { return 0; } //cities.size()
-
-/*
-    private int getRandomNumberFrom1To3() {
-        Random rn = new Random();
-        int randomNumber = rn.nextInt(3) + 1;
-        return randomNumber;
-    }
-*/
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-
+    public City getCityAt(int position) {
+        return cities.get(position);
     }
 }

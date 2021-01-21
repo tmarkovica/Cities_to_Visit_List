@@ -1,17 +1,19 @@
 package hr.ferit.tomislavmarkovica.cityst_to_visit_list;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Random;
-
-import static hr.ferit.tomislavmarkovica.cityst_to_visit_list.MainActivity.DATA_FETCH;
 
 public class ExploreActivity extends AppCompatActivity {
 
@@ -21,33 +23,69 @@ public class ExploreActivity extends AppCompatActivity {
 
     //
     private DataFetch dataFetch;
-    private TextView textView;
-    //
+    private TextView textViewCityInfo;
+
+    private FragmentTransaction fragmentTransaction;
+    private Switch mSwitch;
+
+    private TextView tvTemp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
 
-        // fix this
-        textView = (TextView) findViewById(R.id.textView);
+        textViewCityInfo = (TextView) findViewById(R.id.textViewCityInfo);
 
-        Intent intent = getIntent();
+        this.dataFetch = DataFetch.getInstance();
 
-        MyParcelable myParcelableObject = (MyParcelable) intent.getParcelableExtra(MainActivity.DATA_FETCH);
+        tvTemp = (TextView) findViewById(R.id.tvTemp);
 
-        //this.dataFetch = myParcelableObject.getDataFetch();
-        //int n = this.dataFetch.getNumberOfElements();
-
-        int n = myParcelableObject.getNumberOfElements();
-
-
-        textView.setText(String.valueOf(n));
-        // ******
+        createFragments();
+        setSwitch();
 
         setButtonFavoirtes();
         setButtonLike();
         setButtonRandom();
+
+        //getRandomCity();
+    }
+
+    private fragment_city_map fragmentCityMap;
+    private fragment_city_info fragmentCityInfo;
+
+    private void createFragments() {
+        fragmentCityMap = new fragment_city_map();
+        fragmentCityInfo = new fragment_city_info();
+    }
+
+    private void setSwitch() {
+        mSwitch = (Switch) findViewById(R.id.switchCityInfo);
+
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentContainer, fragmentCityInfo);
+        fragmentTransaction.commit();
+
+        mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragmentContainer, fragmentCityMap);
+                    fragmentTransaction.commit();
+                    mSwitch.setText("Show city info");
+                    //displayCitiy();
+                }
+                else {
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragmentContainer, fragmentCityInfo);
+                    fragmentTransaction.commit();
+                    mSwitch.setText("Show on map");
+                    //displayCitiy();
+                }
+            }
+        });
     }
 
     private void setButtonFavoirtes() {
@@ -67,8 +105,7 @@ public class ExploreActivity extends AppCompatActivity {
         buttonLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // not implemented
-                textView.setText(String.valueOf(dataFetch.getNumberOfElements())); // remove this
+                Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -79,25 +116,37 @@ public class ExploreActivity extends AppCompatActivity {
         buttonRandom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int randomNumber = getRandomNumberFrom1To3();
-                setN(randomNumber);
+                getRandomCity();Log.i("My Tag", String.valueOf(fragmentCityInfo instanceof fragment_city_info));
             }
         });
     }
 
-    private int getRandomNumberFrom1To3() {
+    private City currentCity;
+
+    private void displayCitiy() {
+        if (mSwitch.isChecked()) {
+            //fragmentCityMap.setCooridnates(currentCity.get_longitude(), currentCity.get_longitude());
+        }
+        else {
+            //fragmentCityInfo.showCityInfo(currentCity.toString());
+
+            //fragmentCityInfo.showCityInfo("hahahhohoh");
+
+            Log.i("My Tag", String.valueOf(fragmentCityInfo instanceof fragment_city_info));
+
+            tvTemp.setText(currentCity.toString());
+
+        }
+    }
+
+    private int getRandomNumber() {
         Random rn = new Random();
-        int randomNumber = rn.nextInt(3) + 1;
+        int randomNumber = rn.nextInt(this.dataFetch.getNumberOfCities()-1) + 0;
         return randomNumber;
     }
 
-    int n=0;
-    private void showN() {
-        Toast.makeText(getBaseContext(), String.valueOf(n) , Toast.LENGTH_SHORT ).show();
-    }
-
-    private void setN(int n) {
-        this.n = n;
-        showN();
+    private void getRandomCity() {
+        this.currentCity = this.dataFetch.getCityAt(getRandomNumber());
+        displayCitiy();
     }
 }

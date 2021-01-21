@@ -33,11 +33,27 @@
         android:layout_centerInParent="true"
         />
 
+    <Switch
+        android:id="@+id/switchCityInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show on map"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        />
+
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_below="@id/switchCityInfo"
+        />
+
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvTemp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/fragmentContainer"
         />
 
 </RelativeLayout>

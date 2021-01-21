@@ -42,7 +42,9 @@ public class MainActivity extends AppCompatActivity {
 
         result = (TextView) findViewById(R.id.result);
 
-        this.dataFetch = new DataFetch(this);
+        this.dataFetch = DataFetch.getInstance();
+        result.setText(this.dataFetch.getData());
+
 
         createIntents();
 
@@ -53,20 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void createIntents() {
         intentFavorites = new Intent(this, FavoritesActivity.class);
-
         intentExplore = new Intent(this, ExploreActivity.class);
-
-        // continue here
-        //MyParcelable myParcelable = new MyParcelable();
-        //myParcelable.setDataFetch(dataFetch);
-        //intentExplore.putExtra(DATA_FETCH, (MyParcelable) myParcelable);
-        //intentExplore.putExtra(DATA_FETCH, 101); // ovaj radi
-
-        MyParcelable myParcelable = new MyParcelable();
-        //myParcelable.setDataFetch(dataFetch);
-        myParcelable.setN(1234);
-
-        intentExplore.putExtra(DATA_FETCH, myParcelable);
     }
 
     private void setButtonFavoirtes() {
@@ -75,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         buttonFavorites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                intentFavorites.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intentFavorites);
             }
         });
@@ -86,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
         buttonExplore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //startActivity(intentExplore);
+
+                intentExplore.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intentExplore);
             }
         });
