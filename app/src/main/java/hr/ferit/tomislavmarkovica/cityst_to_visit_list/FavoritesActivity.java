@@ -14,7 +14,7 @@ import java.util.List;
 public class FavoritesActivity extends AppCompatActivity implements NameClickListener {
 
     private RecyclerView recyclerView;
-    private List<String> dataList;
+    private List<City> dataList;
     private CustomAdapter customAdapter;
 
     //private Button buttonAddPerson;
@@ -25,30 +25,17 @@ public class FavoritesActivity extends AppCompatActivity implements NameClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
 
-        // LV kod
         setupNames();
         setupRecyclerView();
     }
 
-    // LV kod
     private void setupNames() {
         dataList = new ArrayList<>();
-        dataList.add("Robin");
-        dataList.add("David");
-        dataList.add("Filip");
-        dataList.add("Petar");
-        dataList.add("Laura");
-        dataList.add("Mihaela");
-        dataList.add("Ana");
-        dataList.add("Vlatka");
-        dataList.add("Robin2");
-        dataList.add("David2");
-        dataList.add("Filip2");
-        dataList.add("Petar2");
-        dataList.add("Laura2");
-        dataList.add("Mihaela2");
-        dataList.add("Ana2");
-        dataList.add("Vlatka2");
+        dataList.add(new City("Zagreb"));
+        dataList.add(new City("Osijek"));
+        dataList.add(new City("Varaždin"));
+        dataList.add(new City("Đurđevac"));
+        dataList.add(new City("Koprivnica"));
     }
 
     private void setupRecyclerView() {

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,9 +39,11 @@ public class fragment_city_map extends Fragment implements OnMapReadyCallback {
          */
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            LatLng sydney = new LatLng(longitude, latitude);
+            LatLng sydney = new LatLng(latitude, longitude);
             googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker"));
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+            Log.i("tag", String.valueOf(latitude) + ", " + String.valueOf(longitude));
         }
     };
 
@@ -62,14 +65,14 @@ public class fragment_city_map extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    public void setCooridnates(double longitude, double latitude) {
+    public void setCooridnates(double latitude, double longitude) {
         this.longitude = longitude;
         this.latitude = latitude;
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng sydney = new LatLng(longitude, latitude);
+        LatLng sydney = new LatLng(latitude, longitude);
         googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }

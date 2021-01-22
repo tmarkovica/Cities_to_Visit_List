@@ -5,10 +5,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,14 +19,17 @@ public class ExploreActivity extends AppCompatActivity {
     private Button buttonLike;
     private Button buttonRandom;
 
-    //
     private DataFetch dataFetch;
     private TextView textViewCityInfo;
 
     private FragmentTransaction fragmentTransaction;
     private Switch mSwitch;
 
-    private TextView tvTemp;
+    private fragment_city_map fragmentCityMap;
+    private fragment_city_info fragmentCityInfo;
+
+
+    private ExploreFragmentsHandler exploreFragmentsHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,56 +37,21 @@ public class ExploreActivity extends AppCompatActivity {
         setContentView(R.layout.activity_explore);
 
         textViewCityInfo = (TextView) findViewById(R.id.textViewCityInfo);
-
         this.dataFetch = DataFetch.getInstance();
 
-        tvTemp = (TextView) findViewById(R.id.tvTemp);
-
-        createFragments();
-        setSwitch();
+        setExploreFragmentsHandler();
 
         setButtonFavoirtes();
         setButtonLike();
         setButtonRandom();
-
-        //getRandomCity();
     }
 
-    private fragment_city_map fragmentCityMap;
-    private fragment_city_info fragmentCityInfo;
-
-    private void createFragments() {
-        fragmentCityMap = new fragment_city_map();
-        fragmentCityInfo = new fragment_city_info();
-    }
-
-    private void setSwitch() {
+    private void setExploreFragmentsHandler() {
         mSwitch = (Switch) findViewById(R.id.switchCityInfo);
-
-        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentContainer, fragmentCityInfo);
-        fragmentTransaction.commit();
-
-        mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
-                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragmentContainer, fragmentCityMap);
-                    fragmentTransaction.commit();
-                    mSwitch.setText("Show city info");
-                    //displayCitiy();
-                }
-                else {
-                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragmentContainer, fragmentCityInfo);
-                    fragmentTransaction.commit();
-                    mSwitch.setText("Show on map");
-                    //displayCitiy();
-                }
-            }
-        });
+        exploreFragmentsHandler = new ExploreFragmentsHandler();
+        exploreFragmentsHandler.setSwitch(mSwitch);
+        exploreFragmentsHandler.setFragmentManager(getSupportFragmentManager());
+        exploreFragmentsHandler.switchFragment();
     }
 
     private void setButtonFavoirtes() {
@@ -116,27 +82,10 @@ public class ExploreActivity extends AppCompatActivity {
         buttonRandom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getRandomCity();Log.i("My Tag", String.valueOf(fragmentCityInfo instanceof fragment_city_info));
+                exploreFragmentsHandler.enableSwitch();
+                exploreFragmentsHandler.setCity(getRandomCity());
             }
         });
-    }
-
-    private City currentCity;
-
-    private void displayCitiy() {
-        if (mSwitch.isChecked()) {
-            //fragmentCityMap.setCooridnates(currentCity.get_longitude(), currentCity.get_longitude());
-        }
-        else {
-            //fragmentCityInfo.showCityInfo(currentCity.toString());
-
-            //fragmentCityInfo.showCityInfo("hahahhohoh");
-
-            Log.i("My Tag", String.valueOf(fragmentCityInfo instanceof fragment_city_info));
-
-            tvTemp.setText(currentCity.toString());
-
-        }
     }
 
     private int getRandomNumber() {
@@ -145,8 +94,7 @@ public class ExploreActivity extends AppCompatActivity {
         return randomNumber;
     }
 
-    private void getRandomCity() {
-        this.currentCity = this.dataFetch.getCityAt(getRandomNumber());
-        displayCitiy();
+    private City getRandomCity() {
+        return this.dataFetch.getCityAt(getRandomNumber());
     }
 }

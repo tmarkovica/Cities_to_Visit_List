@@ -10,7 +10,9 @@
         android:id="@+id/textViewCityInfo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="fragment 1"
+        android:textSize="30dp"
+        android:textAlignment="center"
+        android:padding="10dp"
         />
 
 </FrameLayout>

@@ -11,14 +11,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.IOError;
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -76,8 +69,6 @@ public class MainActivity extends AppCompatActivity {
         buttonExplore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(intentExplore);
-
                 intentExplore.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intentExplore);
             }

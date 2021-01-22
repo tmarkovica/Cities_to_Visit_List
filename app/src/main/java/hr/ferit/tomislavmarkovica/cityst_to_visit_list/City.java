@@ -1,21 +1,23 @@
 package hr.ferit.tomislavmarkovica.cityst_to_visit_list;
 
 public class City {
-    private int id;
-    private String wikiDataId;
-    private String type;
-    private String city;
-    private String name;
-    private String country;
-    private String countryCode;
-    private String region;
-    private String regionCode;
-    private int elevationMeters;
-    private double latitude;
-    private double longitude;
-    private int population;
-    private String timezone;
+    private int id = 0;
+    private String wikiDataId = "";
+    private String type = "";
+    private String city = "";
+    private String name = "";
+    private String country = "";
+    private String countryCode = "";
+    private String region = "";
+    private String regionCode = "";
+    private int elevationMeters = 0;
+    private double latitude = 0;
+    private double longitude = 0;
+    private int population = 0;
+    private String timezone = "";
     private boolean deleted;
+
+    public City(String name) { this.name = name; }
 
     public City(int id,
             String wikiDataId,
@@ -85,7 +87,7 @@ public class City {
 
     public boolean get_deleted() { return this.deleted; }
     public void set_deleted(boolean deleted) { this.deleted = deleted; }
-
+/*
     @Override
     public String toString() {
         return "City {" + "\n" +
@@ -101,5 +103,20 @@ public class City {
                 ", latitude=" + latitude + "\n" +
                 ", longitude=" + longitude + "\n" +
                 '}' + "\n" + "\n";
+    }
+    */
+
+    @Override
+    public String toString() {
+        return type + "\n" +
+                "-------------" + "\n" +
+                id + "\n" +
+                "name: " + name + "\n" +
+                "country: " + country + "\n" +
+                "countryCode: " + countryCode + "\n" +
+                "region: " + region + "\n" +
+                "regionCode: " + regionCode + "\n" +
+                "latitude: " + latitude + "\n" +
+                "longitude: " + longitude  +"\n";
     }
 }

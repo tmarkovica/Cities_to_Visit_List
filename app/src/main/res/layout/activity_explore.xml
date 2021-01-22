@@ -6,32 +6,38 @@
     android:layout_height="match_parent"
     tools:context=".ExploreActivity">
 
-    <Button
-        android:id="@+id/buttonFavorites"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/relativeLayoutForButtons"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/buttonStringFavorites"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        />
+        >
 
-    <Button
-        android:id="@+id/buttonRandom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Random"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        />
+        <Button
+            android:id="@+id/buttonFavorites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/buttonStringFavorites"
+            android:layout_alignParentLeft="true"
+            />
 
-    <Button
-        android:id="@+id/buttonLike"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Like"
-        android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        />
+        <Button
+            android:id="@+id/buttonRandom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Random"
+            android:layout_alignParentRight="true"
+            />
+
+        <Button
+            android:id="@+id/buttonLike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Like"
+            android:layout_centerInParent="true"
+            />
+
+    </RelativeLayout>
 
     <Switch
         android:id="@+id/switchCityInfo"
@@ -40,20 +46,14 @@
         android:text="Show on map"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
+        android:enabled="false"
         />
 
     <FrameLayout
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:layout_below="@id/switchCityInfo"
-        />
-
-    <TextView
-        android:id="@+id/tvTemp"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/fragmentContainer"
+        android:layout_below="@id/switchCityInfo"
         />
 
 </RelativeLayout>
