@@ -5,11 +5,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.OkHttpClient;
 
@@ -33,17 +39,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        result = (TextView) findViewById(R.id.result);
-
-        this.dataFetch = DataFetch.getInstance();
-        result.setText(this.dataFetch.getData());
-
-
         createIntents();
-
         setButtonFavoirtes();
-
         setButtonExplore();
+
+        //IOData_Favorites.emptyFile(getBaseContext());
     }
 
     private void createIntents() {

@@ -3,8 +3,10 @@ package hr.ferit.tomislavmarkovica.cityst_to_visit_list;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.Toast;
 
 public class ExploreFragmentsHandler {
 
@@ -62,9 +64,12 @@ public class ExploreFragmentsHandler {
         });
     }
 
-    private City currentCity;
+    private City currentCity = null;
 
     public void setCity(City city) {
+        if (city != null) {
+
+        }
         this.currentCity = city;
         displayCitiy();
     }
@@ -74,11 +79,18 @@ public class ExploreFragmentsHandler {
             this.fragmentCityMap.setCooridnates(this.currentCity.get_latitude(), this.currentCity.get_longitude());
         }
         else {
-            this.fragmentCityInfo.showCityInfo(currentCity.toString());
+            this.fragmentCityInfo.showCityInfo(this.currentCity.toString());
         }
     }
 
     public void enableSwitch() {
         this.mSwitch.setEnabled(true);
+    }
+
+    public void addCityToFavorites(Context context) {
+        if (currentCity != null) {
+            IOData_Favorites.saveCity(context, currentCity);
+            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
+        }
     }
 }

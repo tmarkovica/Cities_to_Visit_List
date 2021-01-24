@@ -71,7 +71,7 @@ public class ExploreActivity extends AppCompatActivity {
         buttonLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
+                exploreFragmentsHandler.addCityToFavorites(getApplicationContext());
             }
         });
     }
@@ -90,7 +90,7 @@ public class ExploreActivity extends AppCompatActivity {
 
     private int getRandomNumber() {
         Random rn = new Random();
-        int randomNumber = rn.nextInt(this.dataFetch.getNumberOfCities()-1) + 0;
+        int randomNumber = rn.nextInt(this.dataFetch.getNumberOfCities()) + 0;
         return randomNumber;
     }
 

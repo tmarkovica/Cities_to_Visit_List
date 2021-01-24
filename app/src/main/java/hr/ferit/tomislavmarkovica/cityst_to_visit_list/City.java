@@ -1,5 +1,8 @@
 package hr.ferit.tomislavmarkovica.cityst_to_visit_list;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class City {
     private int id = 0;
     private String wikiDataId = "";
@@ -87,24 +90,6 @@ public class City {
 
     public boolean get_deleted() { return this.deleted; }
     public void set_deleted(boolean deleted) { this.deleted = deleted; }
-/*
-    @Override
-    public String toString() {
-        return "City {" + "\n" +
-                "id='" + id + '\'' +
-                ", wikiDataId='" + wikiDataId + "\n" +
-                ", type='" + type + "\n" +
-                ", city='" + city + "\n" +
-                ", name='" + name + "\n" +
-                ", country='" + country + "\n" +
-                ", countryCode='" + countryCode + "\n" +
-                ", region='" + region + "\n" +
-                ", regionCode='" + regionCode + "\n" +
-                ", latitude=" + latitude + "\n" +
-                ", longitude=" + longitude + "\n" +
-                '}' + "\n" + "\n";
-    }
-    */
 
     @Override
     public String toString() {
@@ -118,5 +103,26 @@ public class City {
                 "regionCode: " + regionCode + "\n" +
                 "latitude: " + latitude + "\n" +
                 "longitude: " + longitude  +"\n";
+    }
+
+    public JSONObject getJSONObject() {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("id", id);
+            obj.put("wikiDataId", wikiDataId);
+            obj.put("type", type);
+            obj.put("city", city);
+            obj.put("name", name);
+            obj.put("country", country);
+            obj.put("countryCode", countryCode);
+            obj.put("region", region);
+            obj.put("regionCode", regionCode);
+            obj.put("latitude", latitude);
+            obj.put("longitude", longitude);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return obj;
     }
 }
