@@ -4,6 +4,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -67,19 +68,22 @@ public class ExploreFragmentsHandler {
     private City currentCity = null;
 
     public void setCity(City city) {
-        if (city != null) {
-
-        }
         this.currentCity = city;
         displayCitiy();
     }
 
     private void displayCitiy() {
-        if (this.mSwitch.isChecked()) {
-            this.fragmentCityMap.setCooridnates(this.currentCity.get_latitude(), this.currentCity.get_longitude());
+        if (this.currentCity != null)
+        {
+            if (this.mSwitch.isChecked()) {
+                this.fragmentCityMap.setCooridnates(this.currentCity.get_latitude(), this.currentCity.get_longitude());
+            }
+            else {
+                this.fragmentCityInfo.showCityInfo(this.currentCity.toString());
+            }
         }
         else {
-            this.fragmentCityInfo.showCityInfo(this.currentCity.toString());
+            this.fragmentCityInfo.showCityInfo("Request not yet processed");
         }
     }
 
@@ -90,7 +94,6 @@ public class ExploreFragmentsHandler {
     public void addCityToFavorites(Context context) {
         if (currentCity != null) {
             IOData_Favorites.saveCity(context, currentCity);
-            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
         }
     }
 }

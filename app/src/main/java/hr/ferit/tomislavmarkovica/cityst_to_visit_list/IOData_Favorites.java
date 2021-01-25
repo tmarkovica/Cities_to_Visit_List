@@ -37,15 +37,15 @@ public class IOData_Favorites {
     private static String FILE_NAME = "Favorites.json";
 
     public static void save(Context context, List<City> cities) {
-
         FileOutputStream fos = null;
-
         String text; // = makeStringOf(cities);
 
-        if (cities.isEmpty() || cities == null)
+        if (cities.isEmpty())
             text = "";
         else
             text = makeStringOf(cities);
+
+        Log.i("tag", "cities.size() = " + String.valueOf(cities.size()));
 
         try {
             fos = context.openFileOutput(FILE_NAME, MODE_PRIVATE);
@@ -74,7 +74,8 @@ public class IOData_Favorites {
         for (int i=0; i < cities.size(); i++) {
             text = text + cities.get(i).getJSONObject().toString();
 
-            if (cities.size() > 1 && i < cities.size()-1);
+            if (i == 0 && cities.size() > 1) text += ","; // if loop is on first element and there is more than one elements add ","
+            else if (i < cities.size()-1)
                 text += ",";
         }
 
@@ -83,13 +84,23 @@ public class IOData_Favorites {
 
     public static void saveCity(Context context, City city) {
         List<City> cities = load(context);
-
-        cities.add(city);
+        if (addCityIfUnique(cities, city))
+            Toast.makeText(context, "Saved", Toast.LENGTH_LONG).show();
         save(context, cities);
     }
 
-    public static void emptyFile(Context context) {
+    public static boolean addCityIfUnique(List<City> cities, City city) {
+        for (int i=0; i<cities.size(); i++) {
+            if (cities.get(i).get_id() == city.get_id()) {
+                Log.i("tag", "City already in the list");
+                return false;
+            }
+        }
+        cities.add(city);
+        return true;
+    }
 
+    public static void emptyFile(Context context) {
         List<City> cities = new ArrayList<>();
         save(context, cities);
     }
@@ -100,21 +111,16 @@ public class IOData_Favorites {
         List<City> cities = new ArrayList();
         try {
             FileInputStream fileInputStream = context.openFileInput(FILE_NAME);
-
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String line = "";
 
-            //while(line!=null) {
             while ((line = bufferedReader.readLine()) != null) {
-                //line = bufferedReader.readLine();
                 data = data + line;
             }
+            Log.i("tag", "data: " + data);
 
             if(data != "") {
-
-
                 JSONObject JO = new JSONObject(data);
                 JSONArray JA = JO.getJSONArray("data");
 
@@ -132,8 +138,11 @@ public class IOData_Favorites {
                             tempJO.get("countryCode").toString(),
                             tempJO.get("region").toString(),
                             tempJO.get("regionCode").toString(),
+                            tempJO.getInt("elevationMeters"),
                             tempJO.getDouble("latitude"),
-                            tempJO.getDouble("longitude")
+                            tempJO.getDouble("longitude"),
+                            tempJO.getInt("population"),
+                            tempJO.get("timezone").toString()
                     );
                     cities.add(tempCity);
                 }

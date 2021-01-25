@@ -18,9 +18,8 @@ public class City {
     private double longitude = 0;
     private int population = 0;
     private String timezone = "";
-    private boolean deleted;
 
-    public City(String name) { this.name = name; }
+    public City() {}
 
     public City(int id,
             String wikiDataId,
@@ -31,8 +30,11 @@ public class City {
             String countryCode,
             String region,
             String regionCode,
+            int elevationMeters,
             double latitude,
-            double longitude) {
+            double longitude,
+            int population,
+            String timezone) {
         this.id = id;
         this.wikiDataId = wikiDataId;
         this.type = type;
@@ -42,8 +44,11 @@ public class City {
         this.countryCode = countryCode;
         this.region = region;
         this.regionCode = regionCode;
+        this.elevationMeters = elevationMeters;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.population = population;
+        this.timezone = timezone;
     }
 
     public int get_id() { return this.id; }
@@ -80,16 +85,13 @@ public class City {
     public void set_latitude(double latitude) { this.latitude = latitude; }
 
     public double get_longitude() { return this.longitude; }
-    public void longitude(double longitude) { this.longitude = longitude; }
+    public void set_longitude(double longitude) { this.longitude = longitude; }
 
     public int get_population() { return this.population; }
     public void set_population(int population) { this.population = population; }
 
     public String get_timezone() { return this.timezone; }
     public void set_timezone(String timezone) { this.timezone = timezone; }
-
-    public boolean get_deleted() { return this.deleted; }
-    public void set_deleted(boolean deleted) { this.deleted = deleted; }
 
     @Override
     public String toString() {
@@ -101,8 +103,11 @@ public class City {
                 "countryCode: " + countryCode + "\n" +
                 "region: " + region + "\n" +
                 "regionCode: " + regionCode + "\n" +
+                "elevationMeters: " + elevationMeters + "\n" +
                 "latitude: " + latitude + "\n" +
-                "longitude: " + longitude  +"\n";
+                "longitude: " + longitude  + "\n" +
+                "population: " + population + "\n" +
+                "timezone: " + timezone;
     }
 
     public JSONObject getJSONObject() {
@@ -117,8 +122,11 @@ public class City {
             obj.put("countryCode", countryCode);
             obj.put("region", region);
             obj.put("regionCode", regionCode);
+            obj.put("elevationMeters", elevationMeters);
             obj.put("latitude", latitude);
             obj.put("longitude", longitude);
+            obj.put("population", population);
+            obj.put("timezone", timezone);
 
         } catch (JSONException e) {
             e.printStackTrace();

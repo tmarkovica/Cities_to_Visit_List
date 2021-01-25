@@ -2,8 +2,10 @@ package hr.ferit.tomislavmarkovica.cityst_to_visit_list;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.JsonReader;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,8 +18,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -32,7 +36,8 @@ public class DataFetch extends AsyncTask<Void,Void,Void> {
 
     // private constructor restricted to this class itself
     private DataFetch() {
-        connectAPI();
+        client = new OkHttpClient();
+        doInBackground();
     }
 
     // static method to create instance of Singleton class
@@ -50,75 +55,25 @@ public class DataFetch extends AsyncTask<Void,Void,Void> {
     private Response response;
     private OkHttpClient client;
 
+    private String link = "";
+    private City city;
+    private String result = "";
+    private boolean requestProcessed = false;
+
     public void connectAPI() {
-        client = new OkHttpClient();
 
-        Request request = new Request.Builder()
-                .url("https://wft-geo-db.p.rapidapi.com/v1/geo/cities") // https://wft-geo-db.p.rapidapi.com/v1/geo/cities/Q60
-                .get()
-                .addHeader("x-rapidapi-key", "11ff87a06emshe34071c564f77fdp104cbcjsncd878d29d813")
-                .addHeader("x-rapidapi-host", "wft-geo-db.p.rapidapi.com")
-                .build();
-
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                // do nothing
-            }
-
-            @Override
-            public void onResponse(Call call, final Response response) throws IOException {
-                setResponse(response);
-                doInBackground();
-            }
-        });
-    }
-
-    private void setResponse(Response response) {
-        this.response = response;
+        link = "https://wft-geo-db.p.rapidapi.com/v1/geo/cities/";
+        link += String.valueOf(getRandomNumber());
+        //link += String.valueOf(408);
+        Log.i("tag", "connectAPI to: " + link);
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
-        try {
-            InputStream inputStream = response.body().byteStream(); // to return it you have to change the method's signature. From String to InputStream
 
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            String line = "";
-
-            while(line!=null) {
-                line = bufferedReader.readLine();
-                data = data + line;
-            }
-
-            JSONObject JO = new JSONObject(data);
-            JSONArray JA = JO.getJSONArray("data"); // "data" "type" "properties"
-
-            for (int i = 0; i < JA.length(); i++)
-            {
-                JSONObject tempJO = JA.getJSONObject(i);
-
-                City tempCity = new City(
-                        tempJO.getInt("id"),
-                        tempJO.get("wikiDataId").toString(),
-                        tempJO.get("type").toString(),
-                        tempJO.get("city").toString(),
-                        tempJO.get("name").toString(),
-                        tempJO.get("country").toString(),
-                        tempJO.get("countryCode").toString(),
-                        tempJO.get("region").toString(),
-                        tempJO.get("regionCode").toString(),
-                        tempJO.getDouble("latitude"),
-                        tempJO.getDouble("longitude")
-                );
-
-                cities.add(tempCity);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (this.city==null){
+            Log.i("tag", "doInBackground()");
+            makeRequest();
         }
 
         return null;
@@ -129,14 +84,154 @@ public class DataFetch extends AsyncTask<Void,Void,Void> {
         super.onPostExecute(aVoid);
     }
 
+    public City getCity() { Log.i("tag", "getCity()");
+        if (this.city != null)
+        {
+            City temp = this.city;
+            this.city = null;
+            doInBackground();
+            return temp;
+        }
+        else
+        {
 
-    public String getData() { return data; } //cities.size()
-
-    public int getNumberOfCities() {
-        return cities.size();
+            return null;
+        }
     }
 
-    public City getCityAt(int position) {
-        return cities.get(position);
+    private int getRandomNumber() {
+        Random rn = new Random();
+        int randomNumber = rn.nextInt(263000) + 1;
+        return randomNumber;
+    }
+
+    private String pullJSONFromThisString(String input) {
+        String output = "";
+        for (int i=8; i<input.length()-1; i++) {
+            output += input.charAt(i);
+        }
+        return output;
+    }
+
+    private Request request;
+
+    private void makeRequest() {
+        //OkHttpClient client = new OkHttpClient();
+
+        String link = "https://wft-geo-db.p.rapidapi.com/v1/geo/cities/";
+        link += String.valueOf(getRandomNumber());
+        //link += String.valueOf(408);
+
+        request = new Request.Builder()
+                .url(link)
+                .get()
+                .addHeader("x-rapidapi-key", "11ff87a06emshe34071c564f77fdp104cbcjsncd878d29d813")
+                .addHeader("x-rapidapi-host", "wft-geo-db.p.rapidapi.com")
+                .build();
+
+        makeCall();
+    }
+
+    private void makeCall() { Log.i("tag", "makeCall()");
+
+        Response response = null;
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.i("tag", "response failure");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.i("tag", "response succesful");
+                getJSON(response);
+                requestProcessed = true;
+            }
+        });
+    }
+
+    private void getJSON(Response response) { Log.i("tag", "getJSON()");
+        try
+        {
+            InputStream inputStream = response.body().byteStream(); // to return it you have to change the method's signature. From String to InputStream
+
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+            result = "";
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                result = result + line;
+            }
+
+            if (result.contains("data") == false) {
+                Thread.sleep(1000);
+                Log.i("tag", "NIJE dohvacen grad");
+                makeRequest();
+                return;
+            } else if (result.contains("data") == true) {
+                JSONObject JO = new JSONObject(pullJSONFromThisString(result));
+                Log.i("tag", JO.toString());
+
+                City tempCity = makeCityFromJSON(JO);
+
+
+                city = tempCity;
+
+                Log.i("tag", "Dohvacen je grad");
+                if (city != null)
+                Log.i("tag", city.toString());
+                doInBackground();
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();  Log.i("tag", "*IOException in getJSON()");
+        }
+        catch (JSONException e) {
+            e.printStackTrace();  Log.i("tag", "*JSONException in getJSON()");
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();  Log.i("tag", "*InterruptedException in getJSON()");
+        }
+    }
+
+    private City makeCityFromJSON(JSONObject JO) {
+        City tempCity = null;
+        tempCity = new City(
+                getIntAttribute("id", JO),
+                getStringAttribute("wikiDataId", JO),
+                getStringAttribute("type", JO),
+                getStringAttribute("city", JO),
+                getStringAttribute("name", JO),
+                getStringAttribute("country", JO),
+                getStringAttribute("countryCode", JO),
+                getStringAttribute("region", JO),
+                getStringAttribute("regionCode", JO),
+                getIntAttribute("elevationMeters", JO),
+                getIntAttribute("latitude", JO),
+                getIntAttribute("longitude", JO),
+                getIntAttribute("population", JO),
+                getStringAttribute("timezone", JO)
+        );
+        return tempCity;
+    }
+
+    private String getStringAttribute(String attributeName, JSONObject JO) {
+        String temp = "/";
+        try {
+            if (JO.getString(attributeName) != "" || !JO.isNull(attributeName)) temp = JO.getString(attributeName);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return temp;
+    }
+
+    private int getIntAttribute(String attributeName, JSONObject JO) {
+        int temp = 0;
+        try {
+            if (!JO.isNull(attributeName)) temp = JO.getInt(attributeName);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return temp;
     }
 }
