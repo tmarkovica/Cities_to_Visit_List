@@ -85,8 +85,10 @@ public class IOData_Favorites {
     public static void saveCity(Context context, City city) {
         List<City> cities = load(context);
         if (addCityIfUnique(cities, city))
+        {
             Toast.makeText(context, "Saved", Toast.LENGTH_LONG).show();
-        save(context, cities);
+            save(context, cities);
+        }
     }
 
     public static boolean addCityIfUnique(List<City> cities, City city) {
