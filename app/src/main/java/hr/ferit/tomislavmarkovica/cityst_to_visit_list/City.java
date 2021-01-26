@@ -133,4 +133,8 @@ public class City {
         }
         return obj;
     }
+
+    public String getWikiDataURL() {
+        return "https://www.wikidata.org/wiki/" + get_wikiDataId();
+    }
 }

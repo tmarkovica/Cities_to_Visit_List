@@ -4,5 +4,5 @@ public interface NameClickListener {
 
     void onXIconClick(int position);
 
-    void onNameClick(int position);
+    String onNameClick(int position);
 }

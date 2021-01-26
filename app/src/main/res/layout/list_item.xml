@@ -30,4 +30,24 @@
         android:onClick="onClickRemovePerson"
         />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="top"
+        >
+
+        <TextView
+            android:id="@+id/test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_alignParentTop="true"
+            android:background="#C1C1C1"
+            android:visibility="invisible"
+            android:autoLink="web"
+            android:textColorLink="#62A0BC"
+            />
+
+    </RelativeLayout>
+
 </FrameLayout>

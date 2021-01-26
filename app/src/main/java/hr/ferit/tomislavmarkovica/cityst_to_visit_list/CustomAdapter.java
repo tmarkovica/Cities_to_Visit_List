@@ -1,6 +1,9 @@
 package hr.ferit.tomislavmarkovica.cityst_to_visit_list;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,8 +71,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.NameViewHo
         }
     }
 
-    public void nameClicked(int position) {
-        //DataStore_Favorites.save(context, dataList);
+    public String nameClicked(int position) {
+        if(dataList.size() > position) {
+            return dataList.get(position).getWikiDataURL();
+        }
+        return "";
     }
 
     public void addName(City name) {
@@ -80,15 +86,17 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.NameViewHo
 
         private final TextView textViewCityName;
         private NameClickListener nameClickListener;
+        private TextView test; // novo
 
         public NameViewHolder(@NonNull View itemView, NameClickListener nameClickListener) {
             super(itemView);
 
             textViewCityName = itemView.findViewById(R.id.textViewCity);
             this.nameClickListener = nameClickListener;
-            //itemView.setOnClickListener(this);
 
             setTextViewCityName();
+
+            test = itemView.findViewById(R.id.test);
 
 
             textViewRemoveCity = itemView.findViewById(R.id.textViewRemoveFromFavorites);
@@ -110,7 +118,21 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.NameViewHo
             textViewCityName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    nameClickListener.onNameClick(getAdapterPosition());
+                    String info = nameClickListener.onNameClick(getAdapterPosition());
+
+                    // novo
+                    test.setText(Html.fromHtml(info));
+
+                    if (test.getVisibility() == View.VISIBLE)
+                    {
+                        test.setVisibility(View.INVISIBLE);
+                        textViewRemoveCity.setEnabled(true);
+                    }
+                    else
+                    {
+                        test.setVisibility(View.VISIBLE);
+                        textViewRemoveCity.setEnabled(false);
+                    }
                 }
             });
         }
