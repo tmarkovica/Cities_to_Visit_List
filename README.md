@@ -32,17 +32,17 @@ API works with only 1 request/second. That means when searching for city you can
 
 ## 
 
-ORWMA android projekt. \
+ORWMA android projekt.
 
 https://rapidapi.com/ \
-https://wft-geo-db.p.rapidapi.com/v1/geo/cities \
+https://wft-geo-db.p.rapidapi.com/v1/geo/cities
 
 
 JSON DATA FETCHING AND PARSING FROM URL \
 https://www.youtube.com/watch?v=Vcn4OuV4Ixg&list=LL&index=1&t=798s \
 
 
-How do you set an integer value with JSONObject in Java? \
+How do you set an integer value with JSONObject in Java?
 https://stackoverflow.com/questions/37999822/how-do-you-set-an-integer-value-with-jsonobject-in-java/37999997 \
 
 
@@ -50,7 +50,7 @@ How to Switch Between Activities \
 https://www.youtube.com/watch?v=6RtF_mbHcEc&t=3s \
 
 
-How to send an object from one Android Activity to another using Intents? \
+How to send an object from one Android Activity to another using Intents?
 https://stackoverflow.com/questions/2139134/how-to-send-an-object-from-one-android-activity-to-another-using-intents \
 
 
@@ -71,7 +71,7 @@ https://www.youtube.com/watch?v=2v5AxQK-A2I&t=170s \
 
 
 
-How can I parse a local JSON file from assets folder into a ListView? \
+How can I parse a local JSON file from assets folder into a ListView?
 https://stackoverflow.com/questions/19945411/how-can-i-parse-a-local-json-file-from-assets-folder-into-a-listview/19945484#19945484 \
 
 
